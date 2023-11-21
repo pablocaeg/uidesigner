@@ -3,8 +3,6 @@
   export let show = false;
   export let onSubmit;
   export let onCancel;
-  export let x = 0; // X coordinate
-  export let y = 0; // Y coordinate
 
   let elementProps = {
     color: "#FFFFFF", // Default color
@@ -22,7 +20,7 @@
 </script>
 
 {#if show}
-  <div class="popup" style="top: {y}px; left: {x}px;">
+  <div class="popup">
     <div>
       <label>Color: <input type="color" bind:value={elementProps.color} /></label
       >
@@ -43,7 +41,9 @@
 
 <style>
   .popup {
-    position: absolute; /* Changed to absolute */
+    position: fixed;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
     background: white;
     padding: 10px;

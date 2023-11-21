@@ -2,7 +2,6 @@
   import ElementPropertiesPopup from "./ElementPropertiesPopup.svelte";
   import { onMount } from "svelte";
 
-  let popupPosition = { x: 0, y: 0 };
   let showPopup = false; // Declare showPopup
   let currentElement = null;
   let dropZone;
@@ -27,8 +26,6 @@
     const relativeX = x / rect.width;
     const relativeY = y / rect.height;
 
-    popupPosition.x = event.clientX;
-    popupPosition.y = event.clientY;
     currentElement = { type: elementType, x: relativeX, y: relativeY };
     showPopup = true;
   }
@@ -61,8 +58,6 @@
     on:drop={handleDrop}
   >
     <ElementPropertiesPopup
-      x={popupPosition.x}
-      y={popupPosition.y}
       show={showPopup}
       onSubmit={addElement}
       onCancel={cancelAddElement}
