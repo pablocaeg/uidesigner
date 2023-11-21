@@ -78,9 +78,9 @@
       </div>
     {/each}
   </div>
-
+  
   <!-- List of draggable elements -->
-  <div class="elements-list">
+  <div class="top-bar">
     {#each ["TextField", "Button", "Checkbox"] as element}
       <div
         class="draggable-element"
@@ -96,18 +96,47 @@
 
 <style>
   .drop-zone {
-    position: relative;
+    position: absolute;
+    top: 60px; /* Height of the top bar */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto; /* In case content overflows */
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 10px;
     border: 2px dashed #ccc;
     padding: 10px;
-    position: relative;
     min-height: 500px; /* Set a minimum height for visibility when empty */
   }
 
-  .draggable-element {
-    cursor: pointer;
-    /* Additional styling */
+  .top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px; /* Adjust the height as needed */
+    background-color: #4a4a4a; /* A dark shade for the background */
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 100;
   }
+
+  .draggable-element {
+    margin-right: 15px; /* Spacing between elements */
+    cursor: pointer;
+    background-color: #000000;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+  }
+
+  .draggable-element:hover {
+    background-color: #e7e7e7;
+  }
+
 </style>
