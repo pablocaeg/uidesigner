@@ -32,7 +32,7 @@
 
   function addElement(elementProps) {
     elements = [...elements, { ...currentElement, ...elementProps }];
-    console.log(elements);
+    console.log(JSON.stringify(elements));
     showPopup = false;
   }
 
