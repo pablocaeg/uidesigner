@@ -8,6 +8,48 @@
   let draggedElementIndex = -1;
   let nextElementId = 1; // Contador para IDs de elementos
 
+  let selectedElementIndex = null;
+
+function selectElementForRepositioning(element, index) {
+  selectedElementIndex = index;
+  // Agregar lógica para escuchar eventos de teclado
+  window.addEventListener('keydown', handleKeyPress);
+}
+
+function clearSelection() {
+  selectedElementIndex = null;
+  window.removeEventListener('keydown', handleKeyPress);
+}
+
+function handleKeyPress(event) {
+  if (selectedElementIndex == null) return;
+  let moved = false;
+  const moveAmount = 5; // Cantidad de píxeles para mover el elemento
+
+  switch (event.key) {
+    case 'ArrowRight':
+      elements[selectedElementIndex].x += moveAmount / dropZone.getBoundingClientRect().width;
+      moved = true;
+      break;
+    case 'ArrowLeft':
+      elements[selectedElementIndex].x -= moveAmount / dropZone.getBoundingClientRect().width;
+      moved = true;
+      break;
+    case 'ArrowUp':
+      elements[selectedElementIndex].y -= moveAmount / dropZone.getBoundingClientRect().height;
+      moved = true;
+      break;
+    case 'ArrowDown':
+      elements[selectedElementIndex].y += moveAmount / dropZone.getBoundingClientRect().height;
+      moved = true;
+      break;
+  }
+
+  if (moved) {
+    elements = elements.slice(); // Actualizar la reactividad en Svelte
+  }
+}
+
   onMount(() => {
     // Inicializar o recuperar elementos si es necesario
   });
@@ -17,6 +59,8 @@
   }
 
   function handleDrop(event) {
+      clearSelection()
+
     event.preventDefault();
     const rect = dropZone.getBoundingClientRect();
     const x = event.clientX - rect.left;
@@ -94,6 +138,7 @@
       <div
         class="dropped-element"
         draggable="true"
+        on:dblclick={() => selectElementForRepositioning(element, index)}
         on:dragstart={(event) => handleElementDragStart(event, index)}
         on:dragend={handleDragEnd}
         style="position: absolute; left: {element.x * 100}%; top: {element.y *
