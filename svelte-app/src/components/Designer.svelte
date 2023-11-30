@@ -1,49 +1,82 @@
 <script>
-  import ElementPropertiesPopup from "./ElementPropertiesPopup.svelte";
   import { onMount } from "svelte";
 
-  let showPopup = false; // Declare showPopup
   let currentElement = null;
   let dropZone;
-  let elements = []; // This will store the elements added to the drop zone
+  let elements = []; // Almacena los elementos añadidos a la drop zone
+  let draggingExistingElement = false;
+  let draggedElementIndex = -1;
+  let nextElementId = 1; // Contador para IDs de elementos
 
   onMount(() => {
-    // Initialize or fetch elements if necessary
+    // Inicializar o recuperar elementos si es necesario
   });
 
   function handleDragOver(event) {
-    event.preventDefault(); // Necessary for allowing drop
+    event.preventDefault(); // Necesario para permitir soltar
   }
 
   function handleDrop(event) {
     event.preventDefault();
-    const elementType = event.dataTransfer.getData("text/plain");
-
-    // Calculate relative position
     const rect = dropZone.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
     const relativeX = x / rect.width;
     const relativeY = y / rect.height;
 
-    currentElement = { type: elementType, x: relativeX, y: relativeY };
-    showPopup = true;
+    if (draggingExistingElement) {
+      elements[draggedElementIndex] = {
+        ...elements[draggedElementIndex],
+        x: relativeX,
+        y: relativeY,
+      };
+      elements = elements.slice(); // Reactivar en Svelte
+      draggingExistingElement = false;
+    } else {
+      // Aquí manejar la adición de un nuevo elemento
+      const elementType = event.dataTransfer.getData("text/plain");
+      currentElement = {
+        id: nextElementId++,
+        type: elementType,
+        x: relativeX,
+        y: relativeY,
+      };
+      elements = [...elements, { ...currentElement }];
+    }
   }
 
-  function addElement(elementProps) {
-    elements = [...elements, { ...currentElement, ...elementProps }];
-    console.log(JSON.stringify(elements));
-    showPopup = false;
+  function handleTrashDragOver(event) {
+    event.preventDefault(); // Necessary to allow dropping
   }
 
-  function cancelAddElement() {
-    showPopup = false;
+  function handleTrashDrop(event) {
+    event.preventDefault();
+    if (draggingExistingElement) {
+      elements = elements.filter((_, index) => index !== draggedElementIndex);
+      draggingExistingElement = false;
+    }
+  }
+
+  function handleElementDragStart(event, index) {
+    draggingExistingElement = true;
+    draggedElementIndex = index;
+  }
+
+  function handleDragEnd() {
+    draggingExistingElement = false;
   }
 
   function createElement(element) {
+    const disabledInteractionsStyle = 'pointer-events: none;';
+
     switch (element.type) {
       case "Button":
-      return `<button style="font-size: ${element.size}px; background-color: ${element.color};">${element.text}</button>`;      // Aquí puedes añadir más casos para diferentes tipos de elementos
+      return `<button style="${disabledInteractionsStyle}">Test Button</button>`;
+            case "TextField":
+      return `<input type="text" style="${disabledInteractionsStyle}" placeholder="Campo de texto"/>`;
+            case "Checkbox":
+      return `<input type="checkbox" style="${disabledInteractionsStyle}"/>`;
+            // Aquí puedes añadir más casos para diferentes tipos de elementos
       default:
         return `<div>Elemento sin añadir</div>`;
     }
@@ -57,15 +90,12 @@
     on:dragover={handleDragOver}
     on:drop={handleDrop}
   >
-    <ElementPropertiesPopup
-      show={showPopup}
-      onSubmit={addElement}
-      onCancel={cancelAddElement}
-    />
-
-    {#each elements as element}
+    {#each elements as element, index (element.id)}
       <div
         class="dropped-element"
+        draggable="true"
+        on:dragstart={(event) => handleElementDragStart(event, index)}
+        on:dragend={handleDragEnd}
         style="position: absolute; left: {element.x * 100}%; top: {element.y *
           100}%;"
       >
@@ -73,7 +103,7 @@
       </div>
     {/each}
   </div>
-  
+
   <!-- List of draggable elements -->
   <div class="top-bar">
     {#each ["TextField", "Button", "Checkbox"] as element}
@@ -86,6 +116,13 @@
         {element}
       </div>
     {/each}
+    <div
+      class="trash"
+      on:dragover={handleTrashDragOver}
+      on:drop={handleTrashDrop}
+    >
+      Delete element
+    </div>
   </div>
 </main>
 
@@ -98,11 +135,21 @@
     bottom: 0;
     overflow: auto; /* In case content overflows */
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
     gap: 10px;
     border: 2px dashed #ccc;
     padding: 10px;
     min-height: 500px; /* Set a minimum height for visibility when empty */
+  }
+  
+  .trash {
+    margin-left: 40%;
+    cursor: pointer;
+    background-color: #ef4848;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
   }
 
   .top-bar {
@@ -133,5 +180,4 @@
   .draggable-element:hover {
     background-color: #e7e7e7;
   }
-
 </style>
