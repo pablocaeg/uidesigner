@@ -1,6 +1,6 @@
 <script>
 	export let name;
-	import Designer from "./components/Designer.svelte";
+	import Designer from "./components/DesignerLibrary.svelte";
 </script>
 
 <main>
