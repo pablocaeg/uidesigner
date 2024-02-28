@@ -8,6 +8,13 @@
 
 <div id="interface-container">
   <div>
+    <div id="upper-bar-container">
+      <div id="upper-bar">
+        <p id="project-title">
+          lowsheets | A low-code programming system based on spreadsheets
+        </p>
+      </div>
+    </div>
     <div id="tabs">
       <button
         class="tab-btn"
@@ -27,12 +34,18 @@
         on:click={() => setActiveTab("modify-general")}
         >Modify general interface of the application</button
       >
+      <div id="history-btn-container">
+        <button id="undo" class="history-btn">↩</button>
+        <button id="redo" class="history-btn">↪</button>
+        <p id="history-dropdown">Show history</p>
+      </div>
     </div>
     <div id="top-bar-container">
       <div id="top-bar"></div>
     </div>
   </div>
   <div id="dropzone"></div>
+  <div id="generate-btn">Generar aplicación</div>
 </div>
 
 <style>
@@ -42,6 +55,53 @@
     height: 100%;
     margin: 0;
     min-height: 100vh;
+  }
+  #upper-bar {
+    margin: 20px 0px 0px 15px;
+    display: flex;
+  }
+  #project-title {
+    font-size: 16px;
+    font-weight: 300;
+    margin: 0px;
+  }
+  #history-btn-container {
+    margin: 15px 0px 15px 20%;
+    display: flex;
+  }
+  .history-btn {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+
+    font-size: 17px;
+    margin: 0px 2px;
+    padding: 5px;
+    padding-bottom: 0px;
+    border-radius: 5px;
+  }
+  .history-btn:hover {
+    background-color: rgba(223, 223, 223, 0.383);
+  }
+  .history-btn:active,
+  .history-btn:focus {
+    /* remove previous button style */
+    background-color: transparent;
+    outline: none;
+    box-shadow: none;
+  }
+  #history-dropdown {
+    margin-left: 5px;
+    font-weight: 300;
+    padding: 7px;
+    border-radius: 5px;
+  }
+  #history-dropdown:hover {
+    background-color: rgba(223, 223, 223, 0.383);
   }
   #top-bar-container {
     display: flex;
@@ -102,6 +162,6 @@
     gap: 10px;
     border: 2px dashed #ccc;
     padding: 10px;
-    min-height: 650px;
+    min-height: 600px;
   }
 </style>
