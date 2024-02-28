@@ -1,27 +1,41 @@
 <script>
+  let activeTab = "default"; // tab selected by default
 
+  function setActiveTab(tabName) {
+    activeTab = tabName; // updates the active tab based on users selection
+  }
 </script>
 
 <div id="interface-container">
-
   <div>
     <div id="tabs">
-      <p class="tab-btn active">Tablas generadas por defecto</p>
-      <p class="tab-btn">Modificar interfaz de mi tabla</p>
-      <p class="tab-btn">Modificar interfaz general</p>
+      <button
+        class="tab-btn"
+        class:active={activeTab === "default"}
+        on:click={() => setActiveTab("default")}
+        >Default interfaces based on created tables</button
+      >
+      <button
+        class="tab-btn"
+        class:active={activeTab === "modify-table"}
+        on:click={() => setActiveTab("modify-table")}
+        >Modify interface of the selected table</button
+      >
+      <button
+        class="tab-btn"
+        class:active={activeTab === "modify-general"}
+        on:click={() => setActiveTab("modify-general")}
+        >Modify general interface of the application</button
+      >
     </div>
     <div id="top-bar-container">
       <div id="top-bar"></div>
     </div>
   </div>
-
   <div id="dropzone"></div>
-
 </div>
 
-
 <style>
-
   #interface-container {
     position: absolute;
     width: 100%;
@@ -49,9 +63,25 @@
     margin: 8px 25px;
   }
   .tab-btn {
+    /* remove previous button style */
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    /* my style */
     margin: 15px 12px;
     font-size: 14px;
     font-weight: 300;
+  }
+  .tab-btn:active,
+  .tab-btn:focus {
+    /* remove previous button style */
+    background-color: transparent;
+    outline: none;
+    box-shadow: none;
   }
   .active {
     text-decoration: underline 2px rgb(86, 86, 86);
@@ -64,7 +94,7 @@
     cursor: pointer;
   }
   #dropzone {
-    margin: 24px;
+    margin: 20px 24px;
     overflow: auto;
     display: flex;
     align-items: start;
@@ -74,5 +104,4 @@
     padding: 10px;
     min-height: 650px;
   }
-
 </style>
