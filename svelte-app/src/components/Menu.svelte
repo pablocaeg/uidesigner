@@ -2,9 +2,7 @@
   import { draggable } from "@neodrag/svelte";
   let activeTab = "modify-general"; // tab selected by default
 
-  let tempMouseMoveHandler;
-
-  let modifyGeneralContainer;
+  let modifyGeneralContainer; //container picked with svelte instead of the DOM
 
   let initialX = 0;
   let initialY = 0;
@@ -13,7 +11,7 @@
     activeTab = tabName; // updates the active tab based on users selection
   }
 
-  function makeElementDraggable(element) {
+  function getOriginalElementListeners(element) {
     draggable(element, { axis: "both" });
     element.addEventListener("neodrag:start", handleDragStart);
     element.addEventListener("neodrag:end", handleDragEnd);
@@ -28,7 +26,7 @@
 
     const clone = originalElement.cloneNode(true);
 
-    makeElementDraggable(clone);
+    getOriginalElementListeners(clone);
 
     originalElement.replaceWith(clone);
 
@@ -38,11 +36,6 @@
     originalElement.style.margin = "0"; //
 
     modifyGeneralContainer.appendChild(originalElement);
-
-    tempMouseMoveHandler = (e) => {
-      console.log("Mouse X:", e.clientX, "Mouse Y:", e.clientY);
-    };
-    document.addEventListener("mousemove", tempMouseMoveHandler);
   }
 
   function handleDragEnd(event) {
@@ -63,18 +56,15 @@
       const placeholder = document.createElement("h1");
       placeholder.textContent = "Your title would be here :)";
       placeholder.style.position = "absolute";
-      console.log("Text position in X: " + (finalDropX - dropRect.left) + "& Text Position in Y: " + (finalDropY - dropRect.top));
       placeholder.style.left = `${finalDropX - dropRect.left}px`;
       placeholder.style.top = `${finalDropY - dropRect.top}px`;
 
-      draggable(placeholder, { axis: "both" });
+      draggable(placeholder, { axis: "both", bounds: dropZone });
 
       dropZone.appendChild(placeholder);
     }
 
-    event.target.remove(); // Remove the dragged element
-    document.removeEventListener("mousemove", tempMouseMoveHandler);
-    console.log("finalDropX:" +finalDropX + "  finalDropY:" + finalDropY)
+    event.target.remove();
   }
 </script>
 
