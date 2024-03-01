@@ -21,6 +21,8 @@
     const originalElement = event.target;
     const rect = originalElement.getBoundingClientRect();
 
+    console.log(rect)
+
     initialX = rect.left;
     initialY = rect.top;
 
@@ -31,8 +33,8 @@
     originalElement.replaceWith(clone);
 
     originalElement.style.position = "absolute";
-    originalElement.style.left = `${rect.left}px`;
-    originalElement.style.top = `${rect.top}px`;
+    originalElement.style.left = `${rect.left + window.scrollX}px`;
+    originalElement.style.top = `${rect.top + window.scrollY}px`;
     originalElement.style.margin = "0"; //
 
     modifyGeneralContainer.appendChild(originalElement);
