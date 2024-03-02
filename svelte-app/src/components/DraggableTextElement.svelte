@@ -78,22 +78,6 @@
 </div>
 
 <style>
-  .resizable {
-    width: 120px;
-    border-radius: 0.75rem;
-    padding: 20px;
-    margin: 1rem;
-    background-color: #29e;
-    color: white;
-    font-size: 20px;
-    font-family: sans-serif;
-    overflow: hidden;
-
-    touch-action: none;
-
-    /* This makes things *much* easier */
-    box-sizing: border-box;
-  }
   .draggable-element {
     margin: 0px 15px;
     padding: 5px 15px;
