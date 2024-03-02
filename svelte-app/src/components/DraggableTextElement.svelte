@@ -79,9 +79,9 @@
 
 <style>
   .draggable-element {
-    margin: 0px 15px;
-    padding: 5px 15px;
-    font-size: 17px;
+    margin: 0px 7px;
+    padding: 4px 12px;
+    font-size: 15px;
     background-color: rgb(255, 255, 255);
     border: 2px solid black;
   }

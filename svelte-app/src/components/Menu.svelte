@@ -46,12 +46,28 @@
       {:else if activeTab === "modify-table"}
         <p>Modify table content will go here</p>
       {:else if activeTab === "modify-general"}
+      <div class="content-container">
+        <p id="draggable-elements-text">Add text elements to the interface</p>
         <div bind:this={modifyGeneralContainer} id="modify-general-container">
           <DraggableTextElement container={modifyGeneralContainer} element_type={"h1"}>Title</DraggableTextElement>
           <DraggableTextElement container={modifyGeneralContainer} element_type={"h4"}>Subtitle</DraggableTextElement>
           <DraggableTextElement container={modifyGeneralContainer} element_type={"p"}>Paragraph</DraggableTextElement>
           <DraggableTextElement container={modifyGeneralContainer} element_type={"code"}>Code Snippet</DraggableTextElement>
         </div>
+      </div>
+      <div class="content-container">
+        <p id="draggable-elements-text">Modify interface's color</p>
+        <div class="pick-color-container">
+          <input class="color-picker" type="color" value="#FFFFFF" id="background-picker" name="background-picker">
+          <label class="color-picking-text" for="background-picker">Background</label>
+          <input class="color-picker" type="color" id="default-text-picker" name="default-text-picker">
+          <label class="color-picking-text" for="default-text-picker">Text's default</label>
+        </div>
+      </div>
+      <div class="content-container">
+        <p id="draggable-elements-text">Modify active element</p>
+
+      </div>
       {/if}
     </div>
   </div>
@@ -73,13 +89,13 @@
     align-items: center;
   }
   #top-bar {
-    margin: 0px;
+    margin: 5px;
     height: 100px;
     width: 96.5%;
     display: flex;
     background-color: rgb(255, 255, 255);
     border: 3px solid white;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 2px 3px 0px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 2px 3px 1px;
     border-radius: 10px;
   }
   #tabs {
@@ -117,12 +133,38 @@
     text-underline-offset: 7px;
     cursor: pointer;
   }
-
+  .content-container {
+    margin-right: 35px;
+  }
   #modify-general-container {
-    height: 100%;
-    margin: 0px 15px;
+    margin: 20px 8px;
     display: flex;
-    justify-content: center;
     align-items: center;
   }
+  #draggable-elements-text {
+    position: relative;
+    margin-top: 4px;
+    left: 16px;
+    font-size: 14px;
+    font-weight: 200;
+  }
+  .color-picker {
+    padding: 0px;
+    border: none;
+    background: none;
+    width: 25px;
+    height: 25px;
+  }
+  .pick-color-container {
+    display: flex;
+    margin: 22px 14px;
+  }
+  .color-picking-text {
+    margin: 1px 8px;
+    margin-right: 25px;
+    font-size: 15px;
+    font-weight: 400;
+  }
+  
+  
 </style>
