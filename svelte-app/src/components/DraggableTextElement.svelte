@@ -3,9 +3,19 @@
 
   export let element_type;
   export let container;
+  export let isTextElementFocused;
 
   let initialX = 0;
   let initialY = 0;
+
+  function enableEdit() {
+    console.log("focus")
+    isTextElementFocused = true;
+  }
+
+  function disableEdit() {
+    isTextElementFocused = false;
+  }
 
   function getOriginalElementListeners(element) {
     draggable(element, { axis: "both" });
@@ -58,6 +68,8 @@
       placeholder.style.left = `${finalDropX - dropRect.left}px`;
       placeholder.style.top = `${finalDropY - dropRect.top}px`;
       placeholder.contentEditable = true;
+      placeholder.addEventListener("focus", enableEdit);
+      placeholder.addEventListener("blur", disableEdit);
 
       draggable(placeholder, { axis: "both", bounds: dropZone });
 

@@ -9,6 +9,7 @@
     activeTab = tabName; // updates the active tab based on users selection
   }
 
+  let isTextElementFocused = false;
 </script>
 
 <div>
@@ -46,28 +47,61 @@
       {:else if activeTab === "modify-table"}
         <p>Modify table content will go here</p>
       {:else if activeTab === "modify-general"}
-      <div class="content-container">
-        <p id="draggable-elements-text">Add text elements to the interface</p>
-        <div bind:this={modifyGeneralContainer} id="modify-general-container">
-          <DraggableTextElement container={modifyGeneralContainer} element_type={"h1"}>Title</DraggableTextElement>
-          <DraggableTextElement container={modifyGeneralContainer} element_type={"h4"}>Subtitle</DraggableTextElement>
-          <DraggableTextElement container={modifyGeneralContainer} element_type={"p"}>Paragraph</DraggableTextElement>
-          <DraggableTextElement container={modifyGeneralContainer} element_type={"code"}>Code Snippet</DraggableTextElement>
+        <div class="content-container">
+          <p id="draggable-elements-text">Add text elements to the interface</p>
+          <div bind:this={modifyGeneralContainer} id="modify-general-container">
+            <DraggableTextElement
+              bind:isTextElementFocused={isTextElementFocused}
+              container={modifyGeneralContainer}
+              element_type="h1">Title</DraggableTextElement
+            >
+            <DraggableTextElement
+              bind:isTextElementFocused={isTextElementFocused}
+              container={modifyGeneralContainer}
+              element_type={"h4"}>Subtitle</DraggableTextElement
+            >
+            <DraggableTextElement
+              bind:isTextElementFocused={isTextElementFocused}
+              container={modifyGeneralContainer}
+              element_type={"p"}>Paragraph</DraggableTextElement
+            >
+            <DraggableTextElement
+              bind:isTextElementFocused={isTextElementFocused}
+              container={modifyGeneralContainer}
+              element_type={"code"}>Code Snippet</DraggableTextElement
+            >
+          </div>
         </div>
-      </div>
-      <div class="content-container">
-        <p id="draggable-elements-text">Modify interface's color</p>
-        <div class="pick-color-container">
-          <input class="color-picker" type="color" value="#FFFFFF" id="background-picker" name="background-picker">
-          <label class="color-picking-text" for="background-picker">Background</label>
-          <input class="color-picker" type="color" id="default-text-picker" name="default-text-picker">
-          <label class="color-picking-text" for="default-text-picker">Text's default</label>
+        <div class="content-container">
+          <p id="draggable-elements-text">Modify interface's color</p>
+          <div class="pick-color-container">
+            <input
+              class="color-picker"
+              type="color"
+              value="#FFFFFF"
+              id="background-picker"
+              name="background-picker"
+            />
+            <label class="color-picking-text" for="background-picker"
+              >Background</label
+            >
+            <input
+              class="color-picker"
+              type="color"
+              id="default-text-picker"
+              name="default-text-picker"
+            />
+            <label class="color-picking-text" for="default-text-picker"
+              >Text's default</label
+            >
+          </div>
         </div>
-      </div>
-      <div class="content-container">
-        <p id="draggable-elements-text">Modify active element</p>
-
-      </div>
+        <div class="content-container">
+          <p id="draggable-elements-text">Modify active element</p>
+          {#if isTextElementFocused}
+            <p>Caught focus of any element</p>
+          {/if}
+        </div>
       {/if}
     </div>
   </div>
@@ -165,6 +199,4 @@
     font-size: 15px;
     font-weight: 400;
   }
-  
-  
 </style>
