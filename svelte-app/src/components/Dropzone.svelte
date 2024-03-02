@@ -3,7 +3,7 @@
 <style>
   #dropzone {
     margin: 20px 24px;
-    overflow: hidden;
+    overflow: auto;
     display: flex;
     align-items: start;
     flex-wrap: wrap;
