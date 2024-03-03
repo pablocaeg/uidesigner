@@ -18,7 +18,6 @@
     activeElement.color = style.color;
     activeElement.background = style.backgroundColor;
     activeElement.fontSize = style.fontSize;
-    focusedElement.textContent = "test"
   }
 
   function disableEdit(event) {
@@ -75,6 +74,7 @@
       placeholder.style.position = "absolute";
       placeholder.style.left = `${finalDropX - dropRect.left}px`;
       placeholder.style.top = `${finalDropY - dropRect.top}px`;
+      console.log(textDefault)
       placeholder.style.color = textDefault;
       placeholder.contentEditable = true;
       placeholder.addEventListener("focus", enableEdit);

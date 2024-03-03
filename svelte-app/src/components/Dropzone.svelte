@@ -1,4 +1,16 @@
-<div id="dropzone"></div>
+<script>
+  import { createEventDispatcher } from "svelte";
+  const dispatch = createEventDispatcher();
+
+  let dropzoneElement;
+
+  // Dispatch the dropzoneElement when it's bound
+  $: if (dropzoneElement) {
+    dispatch("dropzoneBound", { dropzoneElement });
+  }
+</script>
+
+<div bind:this={dropzoneElement} id="dropzone"></div>
 
 <style>
   #dropzone {

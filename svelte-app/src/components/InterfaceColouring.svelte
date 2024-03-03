@@ -1,21 +1,44 @@
 <script>
+  import { onMount } from 'svelte';
   export let textDefault;
+  export let dropzoneElement;
+
+  let background = '#FFFFFF'
+
+  onMount(() => {
+    if (dropzoneElement && getComputedStyle(dropzoneElement).backgroundColor) {
+      background = getComputedStyle(dropzoneElement).backgroundColor;
+    }
+  });
+
+  function updateDropzoneBackgroundColor(color) {
+    if (dropzoneElement) {
+      dropzoneElement.style.backgroundColor = color;
+    }
+  }
+
+  function updateTextDefaultColor(color) {
+    textDefault = color;
+  }
 </script>
 
 <div class="pick-color-container">
   <input
     class="color-picker"
     type="color"
-    value="#FFFFFF"
+    bind:value={background}
     id="background-picker"
     name="background-picker"
+    on:input="{() => updateDropzoneBackgroundColor(background)}"
   />
   <label class="color-picking-text" for="background-picker">Background</label>
   <input
+    bind:value={textDefault}
     class="color-picker"
     type="color"
     id="default-text-picker"
     name="default-text-picker"
+    on:input="{() => updateTextDefaultColor(textDefault)}"
   />
   <label class="color-picking-text" for="default-text-picker"
     >Text's default</label
