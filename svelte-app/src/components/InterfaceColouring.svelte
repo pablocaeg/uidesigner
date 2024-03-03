@@ -1,7 +1,3 @@
-<script>
-  import { dropzoneElementStore } from './stores.js';
-
-</script>
 <div class="pick-color-container">
   <input
     class="color-picker"
