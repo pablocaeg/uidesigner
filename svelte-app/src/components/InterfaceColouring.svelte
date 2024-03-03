@@ -1,7 +1,15 @@
 <script>
   import { onMount } from 'svelte';
-  export let textDefault;
   export let dropzoneElement;
+
+  import { createEventDispatcher } from "svelte";
+  const dispatch = createEventDispatcher();
+
+  let textDefault;
+
+  $: if (textDefault) {
+    dispatch("textDefaultBond", { textDefault });
+  }
 
   let background = '#FFFFFF'
 

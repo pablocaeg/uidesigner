@@ -1,27 +1,43 @@
 <script>
   import { draggable } from "@neodrag/svelte";
+  import { createEventDispatcher } from "svelte";
+
+  const dispatch = createEventDispatcher();
 
   export let textDefault;
   export let element_type;
   export let container;
-  export let isTextElementFocused;
+
   export let activeElement;
 
   let initialX = 0;
   let initialY = 0;
 
-  function enableEdit(event) {
-    console.log("focus")
-    isTextElementFocused = true;
-    const focusedElement = event.target;
-    const style = window.getComputedStyle(focusedElement);
-    activeElement.color = style.color;
-    activeElement.background = style.backgroundColor;
-    activeElement.fontSize = style.fontSize;
+  function rgbToHex(rgb) {
+    // First, remove the 'rgb' and parentheses part, then split the string by commas.
+    let [r, g, b] = rgb.match(/\d+/g).map(Number);
+
+    // Convert each component to hex and concatenate them together
+    return (
+      "#" +
+      ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()
+    );
   }
 
-  function disableEdit(event) {
-    isTextElementFocused = false;
+  function enableEdit(event) {
+    activeElement = event.target;
+    console.log(activeElement);
+
+    // Get computed styles
+    const computedStyle = window.getComputedStyle(activeElement);
+
+    // Dispatch computed style properties instead of the element's direct style properties
+    dispatch("activeElementChange", {
+      color: rgbToHex(computedStyle.color),
+      fontSize: parseInt(computedStyle.fontSize, 10), // Convert px to an integer value
+      active: activeElement,
+      isSelected: true
+    });
   }
 
   function getOriginalElementListeners(element) {
@@ -74,11 +90,10 @@
       placeholder.style.position = "absolute";
       placeholder.style.left = `${finalDropX - dropRect.left}px`;
       placeholder.style.top = `${finalDropY - dropRect.top}px`;
-      console.log(textDefault)
+      console.log(textDefault);
       placeholder.style.color = textDefault;
       placeholder.contentEditable = true;
       placeholder.addEventListener("focus", enableEdit);
-      placeholder.addEventListener("blur", disableEdit);
 
       draggable(placeholder, { axis: "both", bounds: dropZone });
 
@@ -100,6 +115,7 @@
 
 <style>
   .draggable-element {
+    z-index: 999;
     margin: 0px 7px;
     padding: 4px 12px;
     font-size: 15px;

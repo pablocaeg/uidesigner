@@ -12,17 +12,38 @@
     activeTab = tabName; // updates the active tab based on users selection
   }
 
-  let isTextElementFocused = false;
-
-  let activeElementProps = { // this will be used to set the interface for the activeElement
-    color: "",
-    name: "",
-    background: "",
-    fontSize: "",
-  };
-
   let textDefault;
 
+  function handletextDefaultBond(event) {
+    textDefault = event.detail.textDefault;
+  }
+
+  function onActiveElementChange(event) {
+    if (previousActiveElement) {
+        previousActiveElement.style.border = ''; // Remove the temporary border
+    }
+    activeElementStyles = {
+      color: event.detail.color,
+      fontSize: event.detail.fontSize,
+    };
+    isElementSelected = event.detail.isSelected; // Update based on whether an element is selected
+        // Check if there is a currently active element and it is selected
+        if (event.detail.active && isElementSelected) {
+        // Apply a temporary border to indicate the active element
+        event.detail.active.style.border = '2px solid blue'; // Customize as needed
+
+        // Update the reference to the previous active element
+        previousActiveElement = event.detail.active;
+    } else {
+        // If no element is currently selected, clear the previousActiveElement reference
+        previousActiveElement = null;
+    }
+  }
+
+  let activeElementStyles = { color: "#000000", fontSize: "16", active: false }; // Default values
+  let isElementSelected = false; // Controls the visibility of the style modification UI
+  let activeElement;
+  let previousActiveElement = null;
 </script>
 
 <div>
@@ -61,26 +82,28 @@
         <p>Modify table content will go here</p>
       {:else if activeTab === "modify-general"}
         <div class="content-container">
-          <p class="menu-information-text">Add text elements to the interface</p>
+          <p class="menu-information-text">
+            Add text elements to the interface
+          </p>
           <div bind:this={modifyGeneralContainer} id="modify-general-container">
             <DraggableTextElement
-              bind:isTextElementFocused
-              textDefault={textDefault}
-              activeElement={activeElementProps}
+              {textDefault}
+              {activeElement}
+              on:activeElementChange={onActiveElementChange}
               container={modifyGeneralContainer}
               element_type="h1">Title</DraggableTextElement
             >
             <DraggableTextElement
-              bind:isTextElementFocused
-              textDefault={textDefault}
-              activeElement={activeElementProps}
+              {textDefault}
+              {activeElement}
+              on:activeElementChange={onActiveElementChange}
               container={modifyGeneralContainer}
               element_type={"h4"}>Subtitle</DraggableTextElement
             >
             <DraggableTextElement
-              bind:isTextElementFocused
-              textDefault={textDefault}
-              activeElement={activeElementProps}
+              {textDefault}
+              {activeElement}
+              on:activeElementChange={onActiveElementChange}
               container={modifyGeneralContainer}
               element_type={"p"}>Paragraph</DraggableTextElement
             >
@@ -88,13 +111,38 @@
         </div>
         <div class="content-container">
           <p class="menu-information-text">Modify interface's color</p>
-          <InterfaceColouring dropzoneElement={dropzoneElement} textDefault={textDefault}></InterfaceColouring>
+          <InterfaceColouring
+            on:textDefaultBond={handletextDefaultBond}
+            {dropzoneElement}
+          ></InterfaceColouring>
         </div>
         <div class="content-container">
           <p class="menu-information-text">Modify active element</p>
-          {#if isTextElementFocused}
-            {activeElementProps.color}
-          {/if}
+          <div class="modify-element-container">
+            {#if isElementSelected}
+              <input
+                bind:value={activeElementStyles.color}
+                class="color-picker"
+                type="color"
+                id="element-text-color-picker"
+                name="element-text-color-picker"
+              />
+              <label class="modify-element-text" for="element-text-color-picker"
+                >Color</label
+              >
+              <input
+                bind:value={activeElementStyles.fontSize}
+                placeholder="{activeElementStyles.fontSize}px"
+                type="number"
+                id="element-text-fontSize-picker"
+                name="element-text-fontSize-picker"
+              />
+              <label
+                class="modify-element-text"
+                for="element-text-fontSize-picker">Font Size</label
+              >
+            {/if}
+          </div>
         </div>
       {/if}
     </div>
@@ -176,5 +224,25 @@
     font-size: 14px;
     font-weight: 200;
   }
-
+  .color-picker {
+    padding: 0px;
+    border: none;
+    background: none;
+    width: 25px;
+    height: 25px;
+  }
+  .modify-element-container {
+    display: flex;
+    margin: 22px 14px;
+  }
+  .modify-element-text {
+    margin: 2px 7px;
+    margin-right: 20px;
+    font-size: 15px;
+    font-weight: 400;
+  }
+  #element-text-fontSize-picker {
+    width: 50px;
+    padding: 1px;
+  }
 </style>
