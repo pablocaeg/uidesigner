@@ -1,4 +1,5 @@
 <script>
+  import { text } from "svelte/internal";
   import DraggableTextElement from "./DraggableTextElement.svelte";
   import InterfaceColouring from "./InterfaceColouring.svelte";
 
@@ -18,6 +19,8 @@
     background: "",
     fontSize: "",
   };
+
+  let textDefaultColor = "#333333"
 
 </script>
 
@@ -61,18 +64,21 @@
           <div bind:this={modifyGeneralContainer} id="modify-general-container">
             <DraggableTextElement
               bind:isTextElementFocused
+              textDefault={textDefaultColor}
               activeElement={activeElementProps}
               container={modifyGeneralContainer}
               element_type="h1">Title</DraggableTextElement
             >
             <DraggableTextElement
               bind:isTextElementFocused
+              textDefault={textDefaultColor}
               activeElement={activeElementProps}
               container={modifyGeneralContainer}
               element_type={"h4"}>Subtitle</DraggableTextElement
             >
             <DraggableTextElement
               bind:isTextElementFocused
+              textDefault={textDefaultColor}
               activeElement={activeElementProps}
               container={modifyGeneralContainer}
               element_type={"p"}>Paragraph</DraggableTextElement
@@ -81,7 +87,7 @@
         </div>
         <div class="content-container">
           <p class="menu-information-text">Modify interface's color</p>
-          <InterfaceColouring></InterfaceColouring>
+          <InterfaceColouring textDefault={textDefaultColor}></InterfaceColouring>
         </div>
         <div class="content-container">
           <p class="menu-information-text">Modify active element</p>

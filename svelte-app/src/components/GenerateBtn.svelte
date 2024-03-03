@@ -20,5 +20,5 @@
     margin-top: -95px;
     margin-right: 40px;
     left: 1060px;
-  }
+;  }
 </style>

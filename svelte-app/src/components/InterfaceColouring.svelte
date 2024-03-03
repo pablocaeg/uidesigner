@@ -1,3 +1,7 @@
+<script>
+  export let textDefault;
+</script>
+
 <div class="pick-color-container">
   <input
     class="color-picker"

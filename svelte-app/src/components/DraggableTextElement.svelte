@@ -1,6 +1,7 @@
 <script>
   import { draggable } from "@neodrag/svelte";
 
+  export let textDefault;
   export let element_type;
   export let container;
   export let isTextElementFocused;
@@ -74,6 +75,7 @@
       placeholder.style.position = "absolute";
       placeholder.style.left = `${finalDropX - dropRect.left}px`;
       placeholder.style.top = `${finalDropY - dropRect.top}px`;
+      placeholder.style.color = textDefault;
       placeholder.contentEditable = true;
       placeholder.addEventListener("focus", enableEdit);
       placeholder.addEventListener("blur", disableEdit);
