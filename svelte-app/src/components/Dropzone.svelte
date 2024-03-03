@@ -1,4 +1,13 @@
-<div id="dropzone"></div>
+<script>
+  import { dropzoneElementStore } from './stores.js';
+
+  let dropzoneElement;
+  $: if (dropzoneElement) {
+    dropzoneElementStore.set(dropzoneElement);
+  }
+</script>
+
+<div bind:this={dropzoneElement} id="dropzone"></div>
 
 <style>
   #dropzone {

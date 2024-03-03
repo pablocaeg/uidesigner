@@ -1,5 +1,6 @@
 <script>
   import DraggableTextElement from "./DraggableTextElement.svelte";
+  import InterfaceColouring from "./InterfaceColouring.svelte";
 
   let modifyGeneralContainer;
 
@@ -10,6 +11,14 @@
   }
 
   let isTextElementFocused = false;
+
+  let activeElementProps = { // this will be used to set the interface for the activeElement
+    color: "",
+    name: "",
+    background: "",
+    fontSize: "",
+  };
+
 </script>
 
 <div>
@@ -48,58 +57,36 @@
         <p>Modify table content will go here</p>
       {:else if activeTab === "modify-general"}
         <div class="content-container">
-          <p id="draggable-elements-text">Add text elements to the interface</p>
+          <p class="menu-information-text">Add text elements to the interface</p>
           <div bind:this={modifyGeneralContainer} id="modify-general-container">
             <DraggableTextElement
-              bind:isTextElementFocused={isTextElementFocused}
+              bind:isTextElementFocused
+              activeElement={activeElementProps}
               container={modifyGeneralContainer}
               element_type="h1">Title</DraggableTextElement
             >
             <DraggableTextElement
-              bind:isTextElementFocused={isTextElementFocused}
+              bind:isTextElementFocused
+              activeElement={activeElementProps}
               container={modifyGeneralContainer}
               element_type={"h4"}>Subtitle</DraggableTextElement
             >
             <DraggableTextElement
-              bind:isTextElementFocused={isTextElementFocused}
+              bind:isTextElementFocused
+              activeElement={activeElementProps}
               container={modifyGeneralContainer}
               element_type={"p"}>Paragraph</DraggableTextElement
             >
-            <DraggableTextElement
-              bind:isTextElementFocused={isTextElementFocused}
-              container={modifyGeneralContainer}
-              element_type={"code"}>Code Snippet</DraggableTextElement
-            >
           </div>
         </div>
         <div class="content-container">
-          <p id="draggable-elements-text">Modify interface's color</p>
-          <div class="pick-color-container">
-            <input
-              class="color-picker"
-              type="color"
-              value="#FFFFFF"
-              id="background-picker"
-              name="background-picker"
-            />
-            <label class="color-picking-text" for="background-picker"
-              >Background</label
-            >
-            <input
-              class="color-picker"
-              type="color"
-              id="default-text-picker"
-              name="default-text-picker"
-            />
-            <label class="color-picking-text" for="default-text-picker"
-              >Text's default</label
-            >
-          </div>
+          <p class="menu-information-text">Modify interface's color</p>
+          <InterfaceColouring></InterfaceColouring>
         </div>
         <div class="content-container">
-          <p id="draggable-elements-text">Modify active element</p>
+          <p class="menu-information-text">Modify active element</p>
           {#if isTextElementFocused}
-            <p>Caught focus of any element</p>
+            {activeElementProps.color}
           {/if}
         </div>
       {/if}
@@ -175,28 +162,12 @@
     display: flex;
     align-items: center;
   }
-  #draggable-elements-text {
+  .menu-information-text {
     position: relative;
     margin-top: 4px;
     left: 16px;
     font-size: 14px;
     font-weight: 200;
   }
-  .color-picker {
-    padding: 0px;
-    border: none;
-    background: none;
-    width: 25px;
-    height: 25px;
-  }
-  .pick-color-container {
-    display: flex;
-    margin: 22px 14px;
-  }
-  .color-picking-text {
-    margin: 1px 8px;
-    margin-right: 25px;
-    font-size: 15px;
-    font-weight: 400;
-  }
+
 </style>

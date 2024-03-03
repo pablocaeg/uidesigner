@@ -4,16 +4,23 @@
   export let element_type;
   export let container;
   export let isTextElementFocused;
+  export let activeElement;
 
   let initialX = 0;
   let initialY = 0;
 
-  function enableEdit() {
+  function enableEdit(event) {
     console.log("focus")
     isTextElementFocused = true;
+    const focusedElement = event.target;
+    const style = window.getComputedStyle(focusedElement);
+    activeElement.color = style.color;
+    activeElement.background = style.backgroundColor;
+    activeElement.fontSize = style.fontSize;
+    focusedElement.textContent = "test"
   }
 
-  function disableEdit() {
+  function disableEdit(event) {
     isTextElementFocused = false;
   }
 
