@@ -8,35 +8,45 @@
   export let element_type;
   export let container;
 
-  export let activeElement;
+  let activeElement;
 
   let initialX = 0;
   let initialY = 0;
 
   function rgbToHex(rgb) {
-    // First, remove the 'rgb' and parentheses part, then split the string by commas.
-    let [r, g, b] = rgb.match(/\d+/g).map(Number);
+    let [r, g, b] = rgb.match(/\d+/g).map(Number); // Extract the RGB components from the input string
 
-    // Convert each component to hex and concatenate them together
-    return (
+    // Convert each RGB component to a two-digit hexadecimal number and concatenate them
+    let hex =
       "#" +
-      ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()
-    );
+      [r, g, b]
+        .map((x) => x.toString(16).padStart(2, "0").toUpperCase())
+        .join("");
+
+    // Check if the hex color is #000000, if so, change it to #FFFFFF
+    if (hex === "#000000") {
+      return "#FFFFFF";
+    } else {
+      return hex;
+    }
   }
 
   function enableEdit(event) {
     activeElement = event.target;
-    console.log(activeElement);
+
+    dispatch("activeElementSelected", { activeElement });
 
     // Get computed styles
     const computedStyle = window.getComputedStyle(activeElement);
+
+    activeElement = event.target;
 
     // Dispatch computed style properties instead of the element's direct style properties
     dispatch("activeElementChange", {
       color: rgbToHex(computedStyle.color),
       fontSize: parseInt(computedStyle.fontSize, 10), // Convert px to an integer value
-      active: activeElement,
-      isSelected: true
+      background: rgbToHex(computedStyle.backgroundColor),
+      isSelected: true,
     });
   }
 
@@ -49,8 +59,6 @@
   function handleDragStart(event) {
     const originalElement = event.target;
     const rect = originalElement.getBoundingClientRect();
-
-    console.log(rect);
 
     initialX = rect.left;
     initialY = rect.top;
@@ -90,7 +98,6 @@
       placeholder.style.position = "absolute";
       placeholder.style.left = `${finalDropX - dropRect.left}px`;
       placeholder.style.top = `${finalDropY - dropRect.top}px`;
-      console.log(textDefault);
       placeholder.style.color = textDefault;
       placeholder.contentEditable = true;
       placeholder.addEventListener("focus", enableEdit);

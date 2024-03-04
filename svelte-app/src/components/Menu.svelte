@@ -3,6 +3,7 @@
   import InterfaceColouring from "./InterfaceColouring.svelte";
 
   export let dropzoneElement;
+  export let activeElement;
 
   let modifyGeneralContainer;
 
@@ -18,32 +19,45 @@
     textDefault = event.detail.textDefault;
   }
 
+  let activeElementStyles;
+
+  let isElementSelected = false; // Controls the visibility of the style modification UI
+  let previousActiveElement = null;
+
   function onActiveElementChange(event) {
     if (previousActiveElement) {
-        previousActiveElement.style.border = ''; // Remove the temporary border
+      previousActiveElement.style.border = ""; // Remove the temporary border
     }
     activeElementStyles = {
       color: event.detail.color,
       fontSize: event.detail.fontSize,
+      background: event.detail.background,
     };
     isElementSelected = event.detail.isSelected; // Update based on whether an element is selected
-        // Check if there is a currently active element and it is selected
-        if (event.detail.active && isElementSelected) {
-        // Apply a temporary border to indicate the active element
-        event.detail.active.style.border = '2px solid blue'; // Customize as needed
+    // Check if there is a currently active element and it is selected
+    if (activeElement && isElementSelected) {
+      // Apply a temporary border to indicate the active element
+      activeElement.style.border = "2px solid blue"; // Customize as needed
 
-        // Update the reference to the previous active element
-        previousActiveElement = event.detail.active;
+      // Update the reference to the previous active element
+      previousActiveElement = activeElement;
     } else {
-        // If no element is currently selected, clear the previousActiveElement reference
-        previousActiveElement = null;
+      // If no element is currently selected, clear the previousActiveElement reference
+      previousActiveElement = null;
     }
   }
 
-  let activeElementStyles = { color: "#000000", fontSize: "16", active: false }; // Default values
-  let isElementSelected = false; // Controls the visibility of the style modification UI
-  let activeElement;
-  let previousActiveElement = null;
+  function handleActiveElementSelected(event) {
+    activeElement = event.detail.activeElement;
+    console.log(activeElement);
+  }
+
+  function updateStyle() {
+    activeElement.style.fontSize = `${activeElementStyles.fontSize}px`;
+    activeElement.style.color = activeElementStyles.color;
+    activeElement.style.backgroundColor = activeElementStyles.background;
+  }
+  
 </script>
 
 <div>
@@ -87,25 +101,32 @@
           </p>
           <div bind:this={modifyGeneralContainer} id="modify-general-container">
             <DraggableTextElement
+              on:activeElementSelected={handleActiveElementSelected}
               {textDefault}
-              {activeElement}
               on:activeElementChange={onActiveElementChange}
               container={modifyGeneralContainer}
               element_type="h1">Title</DraggableTextElement
             >
             <DraggableTextElement
+              on:activeElementSelected={handleActiveElementSelected}
               {textDefault}
-              {activeElement}
               on:activeElementChange={onActiveElementChange}
               container={modifyGeneralContainer}
               element_type={"h4"}>Subtitle</DraggableTextElement
             >
             <DraggableTextElement
+              on:activeElementSelected={handleActiveElementSelected}
               {textDefault}
-              {activeElement}
               on:activeElementChange={onActiveElementChange}
               container={modifyGeneralContainer}
               element_type={"p"}>Paragraph</DraggableTextElement
+            >
+            <DraggableTextElement
+              on:activeElementSelected={handleActiveElementSelected}
+              {textDefault}
+              on:activeElementChange={onActiveElementChange}
+              container={modifyGeneralContainer}
+              element_type={"code"}>Code Snippet</DraggableTextElement
             >
           </div>
         </div>
@@ -126,9 +147,22 @@
                 type="color"
                 id="element-text-color-picker"
                 name="element-text-color-picker"
+                on:input={updateStyle}
               />
               <label class="modify-element-text" for="element-text-color-picker"
                 >Color</label
+              >
+              <input
+                bind:value={activeElementStyles.background}
+                class="color-picker"
+                type="color"
+                id="element-text-background-picker"
+                name="element-text-background-picker"
+                on:input={updateStyle}
+              />
+              <label
+                class="modify-element-text"
+                for="element-text-background-picker">Background</label
               >
               <input
                 bind:value={activeElementStyles.fontSize}
@@ -136,6 +170,7 @@
                 type="number"
                 id="element-text-fontSize-picker"
                 name="element-text-fontSize-picker"
+                on:input={updateStyle}
               />
               <label
                 class="modify-element-text"
