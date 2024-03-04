@@ -1,5 +1,6 @@
 <script>
   import DraggableTextElement from "./DraggableTextElement.svelte";
+  import ElementModifier from "./ElementModifier.svelte";
   import InterfaceColouring from "./InterfaceColouring.svelte";
 
   export let dropzoneElement;
@@ -20,6 +21,11 @@
   }
 
   let activeElementStyles;
+
+  function handleActiveElementSelected(event) {
+    activeElement = event.detail.activeElement;
+    console.log(activeElement);
+  }
 
   let isElementSelected = false; // Controls the visibility of the style modification UI
   let previousActiveElement = null;
@@ -47,17 +53,6 @@
     }
   }
 
-  function handleActiveElementSelected(event) {
-    activeElement = event.detail.activeElement;
-    console.log(activeElement);
-  }
-
-  function updateStyle() {
-    activeElement.style.fontSize = `${activeElementStyles.fontSize}px`;
-    activeElement.style.color = activeElementStyles.color;
-    activeElement.style.backgroundColor = activeElementStyles.background;
-  }
-  
 </script>
 
 <div>
@@ -141,41 +136,24 @@
           <p class="menu-information-text">Modify active element</p>
           <div class="modify-element-container">
             {#if isElementSelected}
-              <input
-                bind:value={activeElementStyles.color}
-                class="color-picker"
-                type="color"
-                id="element-text-color-picker"
-                name="element-text-color-picker"
-                on:input={updateStyle}
-              />
-              <label class="modify-element-text" for="element-text-color-picker"
-                >Color</label
-              >
-              <input
-                bind:value={activeElementStyles.background}
-                class="color-picker"
-                type="color"
-                id="element-text-background-picker"
-                name="element-text-background-picker"
-                on:input={updateStyle}
-              />
-              <label
-                class="modify-element-text"
-                for="element-text-background-picker">Background</label
-              >
-              <input
-                bind:value={activeElementStyles.fontSize}
-                placeholder="{activeElementStyles.fontSize}px"
-                type="number"
-                id="element-text-fontSize-picker"
-                name="element-text-fontSize-picker"
-                on:input={updateStyle}
-              />
-              <label
-                class="modify-element-text"
-                for="element-text-fontSize-picker">Font Size</label
-              >
+              <ElementModifier
+                {activeElement}
+                {activeElementStyles}
+                typeOfInput="textColor"
+                >Color
+              </ElementModifier>
+              <ElementModifier
+                {activeElement}
+                {activeElementStyles}
+                typeOfInput="textBackground"
+                >Background
+              </ElementModifier>
+              <ElementModifier
+                {activeElement}
+                {activeElementStyles}
+                typeOfInput="textFontSize"
+                >Font Size
+              </ElementModifier>
             {/if}
           </div>
         </div>
