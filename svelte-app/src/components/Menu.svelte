@@ -53,6 +53,14 @@
     }
   }
 
+  function removeActiveElement() {
+    if (activeElement && activeElement.parentNode) {
+      activeElement.parentNode.removeChild(activeElement);
+      activeElement = null; // Reset the active element reference
+      isElementSelected = false;
+    }
+  }
+
 </script>
 
 <div>
@@ -154,8 +162,12 @@
                 typeOfInput="textFontSize"
                 >Font Size
               </ElementModifier>
+              <button id="eliminate-element-btn" on:click={removeActiveElement}>
+                Eliminar elemento
+              </button>
             {/if}
           </div>
+          
         </div>
       {/if}
     </div>
@@ -237,25 +249,14 @@
     font-size: 14px;
     font-weight: 200;
   }
-  .color-picker {
-    padding: 0px;
-    border: none;
-    background: none;
-    width: 25px;
-    height: 25px;
-  }
   .modify-element-container {
     display: flex;
-    margin: 22px 14px;
+    margin: 22px 15px;
   }
-  .modify-element-text {
-    margin: 2px 7px;
-    margin-right: 20px;
-    font-size: 15px;
-    font-weight: 400;
-  }
-  #element-text-fontSize-picker {
-    width: 50px;
+  #eliminate-element-btn {
+    height: 25px;
     padding: 1px;
+    font-size: 14px;
+    padding: 0px 12px;
   }
 </style>

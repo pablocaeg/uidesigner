@@ -63,7 +63,7 @@
   }
   .pick-color-container {
     display: flex;
-    margin: 22px 14px;
+    margin: 22px 15px;
   }
   .color-picking-text {
     margin: 1px 8px;

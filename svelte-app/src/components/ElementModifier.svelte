@@ -53,6 +53,7 @@
   }
   #element-text-fontSize-picker {
     width: 50px;
+    height: 25px;
     padding: 1px;
   }
 </style>
